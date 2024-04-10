@@ -17,6 +17,7 @@ export interface TenantResult {
     updatedAt: Date;
 }
 
-export interface TenantSearchParams {
-    propertyName: string;
+export interface TenantSearchParam{
+    searchType: string;
+    searchValue: string;
 }

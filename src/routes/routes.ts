@@ -7,6 +7,8 @@ import { AuthController } from './../controllers/auth-controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ExpenseController } from './../controllers/expense-controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { LandlordController } from './../controllers/landlord-controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PropertyController } from './../controllers/property-controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { TenantController } from './../controllers/tenant-controller';
@@ -90,29 +92,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PropertyResult": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"string","required":true},
-            "landlord": {"dataType":"string","required":true},
-            "name": {"dataType":"string","required":true},
-            "address": {"dataType":"string","required":true},
-            "createdAt": {"dataType":"datetime","required":true},
-            "updatedAt": {"dataType":"datetime","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CreatePropParams": {
-        "dataType": "refObject",
-        "properties": {
-            "landlord": {"dataType":"string","required":true},
-            "name": {"dataType":"string","required":true},
-            "address": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "LandlordResult": {
         "dataType": "refObject",
         "properties": {
@@ -130,6 +109,51 @@ const models: TsoaRoute.Models = {
         "properties": {
             "name": {"dataType":"string","required":true},
             "numberOfProperties": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PropertyResult": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"string","required":true},
+            "landlord": {"dataType":"string","required":true},
+            "name": {"dataType":"string","required":true},
+            "address": {"dataType":"string","required":true},
+            "percentage": {"dataType":"double","required":true},
+            "createdAt": {"dataType":"datetime","required":true},
+            "updatedAt": {"dataType":"datetime","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreatePropParams": {
+        "dataType": "refObject",
+        "properties": {
+            "landlord": {"dataType":"string","required":true},
+            "name": {"dataType":"string","required":true},
+            "address": {"dataType":"string","required":true},
+            "percentage": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GetAllPropertiesResult": {
+        "dataType": "refObject",
+        "properties": {
+            "remainingCount": {"dataType":"double","required":true},
+            "remainingPages": {"dataType":"double","required":true},
+            "count": {"dataType":"double","required":true},
+            "properties": {"dataType":"array","array":{"dataType":"refObject","ref":"PropertyResult"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GetAllProperties": {
+        "dataType": "refObject",
+        "properties": {
+            "resultPerPage": {"dataType":"double"},
+            "page": {"dataType":"double"},
         },
         "additionalProperties": false,
     },
@@ -161,10 +185,11 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "TenantSearchParams": {
+    "TenantSearchParam": {
         "dataType": "refObject",
         "properties": {
-            "propertyName": {"dataType":"string","required":true},
+            "searchType": {"dataType":"string","required":true},
+            "searchValue": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -362,6 +387,32 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/api/v1/landlords/landlord',
+            authenticateMiddleware([{"jwt":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(LandlordController)),
+            ...(fetchMiddlewares<RequestHandler>(LandlordController.prototype.createLandlord)),
+
+            function LandlordController_createLandlord(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"CreateLandlordParams"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new LandlordController();
+
+
+              const promise = controller.createLandlord.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/v1/property/add',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
@@ -388,14 +439,14 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/api/v1/property/landlord',
+        app.get('/api/v1/property/search/:name',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
-            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.createLandlord)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.searchProperty)),
 
-            function PropertyController_createLandlord(request: any, response: any, next: any) {
+            function PropertyController_searchProperty(request: any, response: any, next: any) {
             const args = {
-                    body: {"in":"body","name":"body","required":true,"ref":"CreateLandlordParams"},
+                    name: {"in":"path","name":"name","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -407,7 +458,33 @@ export function RegisterRoutes(app: Router) {
                 const controller = new PropertyController();
 
 
-              const promise = controller.createLandlord.apply(controller, validatedArgs as any);
+              const promise = controller.searchProperty.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/api/v1/property/properties',
+            authenticateMiddleware([{"jwt":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.viewProperties)),
+
+            function PropertyController_viewProperties(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"ref":"GetAllProperties"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new PropertyController();
+
+
+              const promise = controller.viewProperties.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
@@ -443,11 +520,11 @@ export function RegisterRoutes(app: Router) {
         app.post('/api/v1/tenants/find',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(TenantController)),
-            ...(fetchMiddlewares<RequestHandler>(TenantController.prototype.findTenants)),
+            ...(fetchMiddlewares<RequestHandler>(TenantController.prototype.findTenantsByProp)),
 
-            function TenantController_findTenants(request: any, response: any, next: any) {
+            function TenantController_findTenantsByProp(request: any, response: any, next: any) {
             const args = {
-                    body: {"in":"body","name":"body","required":true,"ref":"TenantSearchParams"},
+                    body: {"in":"body","name":"body","required":true,"ref":"TenantSearchParam"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -459,7 +536,7 @@ export function RegisterRoutes(app: Router) {
                 const controller = new TenantController();
 
 
-              const promise = controller.findTenants.apply(controller, validatedArgs as any);
+              const promise = controller.findTenantsByProp.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

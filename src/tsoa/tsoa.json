@@ -150,60 +150,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"PropertyResult": {
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"landlord": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"required": [
-					"id",
-					"landlord",
-					"name",
-					"address",
-					"createdAt",
-					"updatedAt"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"CreatePropParams": {
-				"properties": {
-					"landlord": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"landlord",
-					"name",
-					"address"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"LandlordResult": {
 				"properties": {
 					"id": {
@@ -249,6 +195,114 @@
 					"name",
 					"numberOfProperties"
 				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PropertyResult": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"landlord": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"percentage": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"landlord",
+					"name",
+					"address",
+					"percentage",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreatePropParams": {
+				"properties": {
+					"landlord": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"percentage": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"landlord",
+					"name",
+					"address",
+					"percentage"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetAllPropertiesResult": {
+				"properties": {
+					"remainingCount": {
+						"type": "number",
+						"format": "double"
+					},
+					"remainingPages": {
+						"type": "number",
+						"format": "double"
+					},
+					"count": {
+						"type": "number",
+						"format": "double"
+					},
+					"properties": {
+						"items": {
+							"$ref": "#/components/schemas/PropertyResult"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"remainingCount",
+					"remainingPages",
+					"count",
+					"properties"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetAllProperties": {
+				"properties": {
+					"resultPerPage": {
+						"type": "number",
+						"format": "double"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -324,14 +378,18 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"TenantSearchParams": {
+			"TenantSearchParam": {
 				"properties": {
-					"propertyName": {
+					"searchType": {
+						"type": "string"
+					},
+					"searchValue": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"propertyName"
+					"searchType",
+					"searchValue"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -642,6 +700,48 @@
 				}
 			}
 		},
+		"/api/v1/landlords/landlord": {
+			"post": {
+				"operationId": "createLandlord",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LandlordResult"
+								}
+							}
+						}
+					},
+					"201": {
+						"description": ""
+					},
+					"400": {
+						"description": "Failed to create post"
+					}
+				},
+				"tags": [
+					"Landlords"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateLandlordParams"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/v1/property/add": {
 			"post": {
 				"operationId": "createProperty",
@@ -651,7 +751,19 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/PropertyResult"
+									"properties": {
+										"propertyResult": {
+											"$ref": "#/components/schemas/PropertyResult"
+										},
+										"landlordName": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"propertyResult",
+										"landlordName"
+									],
+									"type": "object"
 								}
 							}
 						}
@@ -684,25 +796,72 @@
 				}
 			}
 		},
-		"/api/v1/property/landlord": {
-			"post": {
-				"operationId": "createLandlord",
+		"/api/v1/property/search/{name}": {
+			"get": {
+				"operationId": "searchProperty",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/LandlordResult"
+									"properties": {
+										"propertyResult": {
+											"$ref": "#/components/schemas/PropertyResult"
+										},
+										"landlordName": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"propertyResult",
+										"landlordName"
+									],
+									"type": "object"
 								}
 							}
 						}
 					},
-					"201": {
-						"description": ""
+					"404": {
+						"description": "Property not found"
+					}
+				},
+				"tags": [
+					"Properties"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/property/properties": {
+			"post": {
+				"operationId": "getAllProperties",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetAllPropertiesResult"
+								}
+							}
+						}
 					},
-					"400": {
-						"description": "Failed to create post"
+					"404": {
+						"description": "No properties found"
 					}
 				},
 				"tags": [
@@ -719,7 +878,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateLandlordParams"
+								"$ref": "#/components/schemas/GetAllProperties"
 							}
 						}
 					}
@@ -800,7 +959,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/TenantSearchParams"
+								"$ref": "#/components/schemas/TenantSearchParam"
 							}
 						}
 					}

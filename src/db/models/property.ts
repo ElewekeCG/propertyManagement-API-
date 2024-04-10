@@ -18,6 +18,10 @@ const PropertySchema = new Schema({
         maxlength: [300, "Address cannot exceed 300 characters"],
         minlength: [6, "Address should be at least 6 characters long"],
     },
+    percentage:{
+      type: Number,
+      required: [true, "Please enter a number"],
+    }
 },
 { timestamps: true }
 );
@@ -28,6 +32,7 @@ const PropertySchema = new Schema({
       landlord: this.landlord,
       name: this.name,
       address: this.address,
+      percentage: this.percentage,
     };
   };
   
@@ -35,6 +40,7 @@ const PropertySchema = new Schema({
     landlord: Types.ObjectId;
     name: string;
     address: string;
+    percentage: number;
     toJSON: () => any;
   }
   

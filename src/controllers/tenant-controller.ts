@@ -4,7 +4,6 @@ import TenantService from "../services/tenant-service";
 import {
     Body, 
     Controller,
-    Get,
     OperationId,
     Post, 
     Response,
@@ -16,7 +15,7 @@ import {
 import {
     CreateTenantParams,
     TenantResult,
-    TenantSearchParams
+    TenantSearchParam
 } from "../services/models/tenant-models";
 
 @Route("/api/v1/tenants")
@@ -38,19 +37,9 @@ export class TenantController extends Controller {
     @Security("jwt")
     @Response(StatusCodes.OK)
     @Response(StatusCodes.BAD_REQUEST, "Failed to find tenants")
-    public async findTenants(
-        @Body() body: TenantSearchParams
+    public async findTenantsByProp(
+        @Body() body: TenantSearchParam
     ): Promise <TenantResult> {
-        return new TenantService().findTenants(body);
+        return new TenantService().findTenantsByProp(body);
     }
-
-    @Get("/get")
-    @OperationId("getTenants")
-    @Security("jwt")
-    @Response(StatusCodes.OK)
-    @Response(StatusCodes.BAD_REQUEST, "Failed to find tenants")
-    public async getTenants(): Promise <TenantResult> {
-        return new TenantService().getTenants();
-    }
-
 } 

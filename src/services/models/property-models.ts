@@ -2,6 +2,7 @@ export interface CreatePropParams {
     landlord: string;
     name: string;
     address: string;
+    percentage: number;
 }
 
 export interface PropertyResult {
@@ -9,20 +10,19 @@ export interface PropertyResult {
     landlord: string;
     name: string;
     address: string;
-    landlordName: string;
+    percentage: number;
     createdAt: Date;
     updatedAt: Date;
 }
 
-export interface CreateLandlordParams {
-    name: string;
-    numberOfProperties: number;
+export interface GetAllProperties{
+    resultPerPage?: number;
+    page?: number;
 }
 
-export interface LandlordResult {
-    id: string;
-    name: string;
-    numberOfProperties: number;
-    createdAt: Date;
-    updatedAt: Date;
+export interface GetAllPropertiesResult{
+    remainingCount: number;
+    remainingPages: number;
+    count: number;
+    properties: PropertyResult[];
 }
