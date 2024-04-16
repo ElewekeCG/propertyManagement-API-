@@ -43,7 +43,7 @@ export class PropertyController extends Controller {
     @Response(StatusCodes.NOT_FOUND, "Property not found")
     public async searchProperty(
         @Path() name: string
-    ): Promise<{landlordName: string, propertyResult: PropertyResult}> {
+    ): Promise<PropertyResult> {
         try{
             return new PropertyService().searchProp(name);
         } catch (error) {

@@ -4,7 +4,9 @@ import ExpenseService from "../services/expense-service";
 import {
     Body,
     Controller,
+    Get,
     OperationId,
+    Path,
     Post,
     Response,
     Route,
@@ -31,13 +33,13 @@ export class ExpenseController extends Controller {
         return new ExpenseService().createExpense(body);
     }
 
-    @Post("/view")
+    @Get("/view/{property}")
     @OperationId("viewExpense")
     @Security("jwt")
     @Response(StatusCodes.OK)
     @Response(StatusCodes.UNAUTHORIZED, "Unauthorized")
     public async viewExpenses(
-        @Body()property:string
+        @Path()property:string
     ): Promise<CreatedExpenseResult> {
         return new ExpenseService().viewExpenses(property);
     }

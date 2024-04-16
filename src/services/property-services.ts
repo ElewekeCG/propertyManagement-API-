@@ -41,18 +41,14 @@ export default class PropertyService {
 
     public async searchProp(
         name: string
-    ): Promise<{landlordName: string, propertyResult: PropertyResult}> {
+    ): Promise<PropertyResult> {
         try {
-            const searchResult = await Property.findOne({name});
+            const searchResult = await Property.findOne({name}).populate('landlord');
             if (searchResult){
-                const landlord = await Landlord.findById({_id: searchResult.landlord });
-                if (!landlord){
+                if (!searchResult.landlord){
                     throw new NotFoundError("Landlord not found");
                 }
-                return {
-                    landlordName: landlord.name,
-                    propertyResult: searchResult.toJSON() as PropertyResult
-                };
+                return searchResult.toJSON() as PropertyResult;
             } 
             throw new NotFoundError("Property not found");
         } catch (error){
@@ -73,7 +69,7 @@ export default class PropertyService {
             skip: skip,
             limit: resultPerPage,
             sort: { createdAt: -1 },
-        });
+        }).populate('landlord');
 
         if (properties.length > 0){
             const totalProperties = await Property.countDocuments();

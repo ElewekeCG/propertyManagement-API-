@@ -44,7 +44,7 @@ export default class TenantService {
                 if(!propRes) {
                     throw new NotFoundError("Property not found");
                 }
-                searchRes = await Tenant.find({propertyName: propRes._id});
+                searchRes = await Tenant.find({propertyName: propRes._id}).populate('propertyName');
                 if(!searchRes || searchRes.length == 0){
                     throw new NotFoundError("Tenant not found");
                 }
@@ -52,7 +52,7 @@ export default class TenantService {
             }
 
             case 'tenant': {
-                searchRes = await Tenant.findOne({name: value});
+                searchRes = await Tenant.findOne({name: value}).populate('propertyName');
                 if(!searchRes){
                     throw new NotFoundError("Tenant not found");
                 }

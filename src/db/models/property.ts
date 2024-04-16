@@ -1,9 +1,9 @@
 import { Document, Types, model, Schema } from "mongoose";
-
+// import Landlord from "./landlords";
 const PropertySchema = new Schema({
     landlord: {
         type: Types.ObjectId,
-        ref: "Landlords",
+        ref: "Landlord",
         required: [true, "Please enter a value"],
     }, 
     name: {

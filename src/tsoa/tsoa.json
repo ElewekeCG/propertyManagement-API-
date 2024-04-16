@@ -661,8 +661,8 @@
 				}
 			}
 		},
-		"/api/v1/expenses/view": {
-			"post": {
+		"/api/v1/expenses/view/{property}": {
+			"get": {
 				"operationId": "viewExpense",
 				"responses": {
 					"200": {
@@ -687,17 +687,16 @@
 						"jwt": []
 					}
 				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "string"
-							}
+				"parameters": [
+					{
+						"in": "path",
+						"name": "property",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
-				}
+				]
 			}
 		},
 		"/api/v1/landlords/landlord": {
@@ -805,19 +804,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"properties": {
-										"propertyResult": {
-											"$ref": "#/components/schemas/PropertyResult"
-										},
-										"landlordName": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"propertyResult",
-										"landlordName"
-									],
-									"type": "object"
+									"$ref": "#/components/schemas/PropertyResult"
 								}
 							}
 						}
@@ -964,35 +951,6 @@
 						}
 					}
 				}
-			}
-		},
-		"/api/v1/tenants/get": {
-			"get": {
-				"operationId": "getTenants",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/TenantResult"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Failed to find tenants"
-					}
-				},
-				"tags": [
-					"Tenants"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": []
 			}
 		},
 		"/api/v1/transactions/add": {

@@ -361,14 +361,14 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/api/v1/expenses/view',
+        app.get('/api/v1/expenses/view/:property',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(ExpenseController)),
             ...(fetchMiddlewares<RequestHandler>(ExpenseController.prototype.viewExpenses)),
 
             function ExpenseController_viewExpenses(request: any, response: any, next: any) {
             const args = {
-                    property: {"in":"body","name":"property","required":true,"dataType":"string"},
+                    property: {"in":"path","name":"property","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -537,31 +537,6 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.findTenantsByProp.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, undefined, next);
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/tenants/get',
-            authenticateMiddleware([{"jwt":[]}]),
-            ...(fetchMiddlewares<RequestHandler>(TenantController)),
-            ...(fetchMiddlewares<RequestHandler>(TenantController.prototype.getTenants)),
-
-            function TenantController_getTenants(request: any, response: any, next: any) {
-            const args = {
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-
-                const controller = new TenantController();
-
-
-              const promise = controller.getTenants.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
